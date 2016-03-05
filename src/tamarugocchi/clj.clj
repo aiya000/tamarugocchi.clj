@@ -17,9 +17,9 @@
 
 (defn -main [& args]
   (let [tama (createTama)]
-    (println "名前: " (tama :name))
-    (println "HP: " (tama :hp))
-    (println "力 " (tama :power))
+    (println "名前:  " (tama :name))
+    (println "HP:    " (tama :hp))
+    (println "力     " (tama :power))
     (println "肥満度 " (tama :fatness))
     (println "た❍ごっちを始めます。")
     (println "- - - - -")

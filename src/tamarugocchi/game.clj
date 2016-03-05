@@ -7,13 +7,29 @@
   (println "貴方はた❍ごっちの行動を選んでなんかしてください。"))
 
 (defn doSleep [tama]
-  (println "た❍ごっちは寝た。"))
+  (println "た❍ごっちは寝た。")
+  {:name    (tama :name)
+   :hp      (+ (tama :hp) 20)
+   :power   (- (tama :power) 10)
+   :fatness (tama :fatness)})
 (defn doEat [tama]
-  (println "た❍ごっちは何かを食べた。"))
+  (println "た❍ごっちは何かを食べた。")
+  {:name    (tama :name)
+   :hp      (+ (tama :hp) 30)
+   :power   (tama :power)
+   :fatness (+ (tama :fatness) 20)})
 (defn doTraining [tama]
-  (println "た❍ごっちは筋トレをした。 筋肉筋肉〜。"))
+  (println "た❍ごっちは筋トレをした。 筋肉筋肉〜。")
+  {:name    (tama :name)
+   :hp      (- (tama :hp) 30)
+   :power   (+ (tama :power) 40)
+   :fatness (- (tama :fatness) 10)})
 (defn doMakeToilet [tama]
-  (println "た❍ごっちはトイレを致した。"))
+  (println "た❍ごっちはトイレを致した。")
+  {:name    (tama :name)
+   :hp      (tama :hp)
+   :power   (- (tama :power) 20)
+   :fatness (- (tama :fatness) 20)})
 
 (defn makeActionText [tama]
   (str (tama :name)
@@ -23,16 +39,39 @@
        "3: 筋トレする\n"
        "4: トイレする"))
 
+(defn tamaStatus [tama]
+  (str "HP:     " (tama :hp) "\n"
+       "力:     " (tama :power) "\n"
+       "肥満度: " (tama :fatness)))
+
 (defn selectTamaAction [tama]
-  (case (io/promptLn (makeActionText tama))
-    "1" (doSleep tama)
-    "2" (doEat tama)
-    "3" (doTraining tama)
-    "4" (doMakeToilet tama)
+  (println "- - - - -")
+  (println (tamaStatus tama))
+  (println "")
+  (if (or (<= (tama :hp) 0) (>= (tama :fatness) 200))
+    tama
+    (case (io/promptLn (makeActionText tama))
+      "1" (selectTamaAction (doSleep tama))
+      "2" (selectTamaAction (doEat tama))
+      "3" (selectTamaAction (doTraining tama))
+      "4" (selectTamaAction (doMakeToilet tama))
+      "184" {:name (tama :name) :hp 0 :power (tama :power) :fatness (tama :fatness)}
         ((println "!! 1,2,3,4のいずれかを選んでください。")
-         (selectTamaAction tama))))
+         (selectTamaAction tama)))))
+
+; TODO: tell 死因
+(defn printGameResult [deadTama]
+  (println
+    (str (deadTama :name) "の最終ステータスは\n  "
+         "HP: " (deadTama :hp) "\n  "
+         "力: " (deadTama :power) "\n  "
+         "肥満度: " (deadTama :fatness) "\n"
+         "でした。")))
 
 (defn startGame [tama]
   (printUsage)
   (println "- - - - -")
-  (selectTamaAction tama))
+  (let [deadTama (selectTamaAction tama)]
+    (println (deadTama :name) "は安らかに眠った。")
+    (println "")
+    (printGameResult deadTama)))
