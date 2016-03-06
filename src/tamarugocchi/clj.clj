@@ -13,7 +13,8 @@
     {:name tamaName
      :hp defaultTamaHP
      :power defaultTamaPower
-     :fatness defaultTamaFatness}))
+     :fatness defaultTamaFatness
+     :ageAsDay 1}))
 
 (defn -main [& args]
   (let [tama (createTama)]
