@@ -1,4 +1,4 @@
-(ns tamarugocchi.clj
+(ns tamarugocchi.core
   (:gen-class)
   (:require [tamarugocchi.common.io :as io]
             [tamarugocchi.game      :as game]))
